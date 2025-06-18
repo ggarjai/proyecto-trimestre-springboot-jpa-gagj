@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${alimento.id == null} ? 'Crear Alimento' : 'Editar Alimento'">Formulario</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<h1 th:text="${alimento.id == null} ? 'Crear Alimento' : 'Editar Alimento'">Formulario gestión de alimentos</h1>
+
+<form th:object="${alimento}"
+	  th:action="${alimento.id == null}
+                 ? @{/alimentos/crear}
+                 : @{/alimentos/{id}/editar(id=${alimento.id})}"
+	  th:method="post">
+
+	<div>
+		<label for="nombre">Nombre:</label>
+		<input type="text" id="nombre" th:field="*{nombre}" required/>
+	</div>
+
+	<div>
+		<label for="cantidad">Cantidad:</label>
+		<input type="number" id="cantidad" th:field="*{cantidad}" min="1" required/>
+	</div>
+
+	<div>
+		<label>
+			<input type="checkbox" th:field="*{perecedero}"/> Perecedero
+		</label>
+	</div>
+
+	<div>
+		<label for="fechaCaducidad">Fecha de caducidad:</label>
+		<input type="date" id="fechaCaducidad" th:field="*{fechaCaducidad}"/>
+	</div>
+
+	<div>
+		<label for="ubicacionId">ID Ubicación:</label>
+		<input type="number" id="ubicacionId" th:field="*{ubicacionId}" min="1" required/>
+	</div>
+
+	<div>
+		<button type="submit">Guardar</button>
+		<a th:href="@{/alimentos}">Cancelar</a>
+	</div>
+</form>
+
+</body>
+</html>

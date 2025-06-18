@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Alimentos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Alimentos</h1>
+
+<a th:href="@{/alimentos/crear}">Crear Alimento</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${alimentos}">
+        <td th:text="${p.id}">1</td>
+        <td th:text="${p.nombre}">Alimento</td>
+        <td th:text="${p.precio}">0.00</td>
+        <td>
+            <a th:href="@{|/alimentos/editar/${p.id}|}">Editar</a>
+            |
+            <a th:href="@{|/alimentos/eliminar/${p.id}|}"
+               onclick="return confirm('¿Eliminar este alimento?');">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

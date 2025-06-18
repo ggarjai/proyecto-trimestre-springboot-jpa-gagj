@@ -1,58 +1,70 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.request.AlimentoRequestDTO;
 import com.example.demo.dto.response.AlimentoResponseDTO;
+import com.example.demo.model.Alimento;
 import com.example.demo.service.AlimentoService;
+import com.example.demo.service.UbicacionService;
 
-@RestController
-@RequestMapping("/api/alimentos")
+@Controller
+@RequestMapping("/alimentos")
 public class AlimentoController {
 
-	private final AlimentoService service;
+    private final AlimentoService alimentoService;
+    private final UbicacionService ubicacionService;
 
-	public AlimentoController(AlimentoService service) {
-		this.service = service;
-	}
+    public AlimentoController(AlimentoService alimentoService, UbicacionService ubicacionService) {
+        this.alimentoService = alimentoService;
+        this.ubicacionService = ubicacionService;
+    }
 
-	@GetMapping
-	public List<AlimentoResponseDTO> list() {
-		return service.getAll();
-	}
+    @GetMapping
+    public String listar(Model model) {
+        model.addAttribute("alimentos", alimentoService.getAll());
+        return "alimentos/list";
+    }
+    
+    @GetMapping("/crear")
+    public String crearForm(Model model) {
+        model.addAttribute("alimento", new AlimentoRequestDTO());
+        model.addAttribute("ubicaciones", ubicacionService.list());
+        return "alimentos/form";
+    }
+    @PostMapping("/crear")
+    public String crear(@ModelAttribute AlimentoRequestDTO dto) {
+    	alimentoService.create(dto);
+        return "redirect:/alimentos";
+    }
 
-	@GetMapping("/{id}")
-	public AlimentoResponseDTO detail(@PathVariable Long id) {
-		return service.getById(id);
-	}
+    @GetMapping("/{id}/editar")
+    public String editarForm(@PathVariable Long id, Model model) {
+        AlimentoResponseDTO alimento = alimentoService.getById(id);
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public AlimentoResponseDTO create(@Validated @RequestBody AlimentoRequestDTO dto) {
-		return service.create(dto);
-	}
+        AlimentoRequestDTO dto = new AlimentoRequestDTO();
+        dto.setId(alimento.getId());
+        dto.setNombre(alimento.getNombre());
+        dto.setCantidad(alimento.getCantidad());
+        dto.setPerecedero(alimento.isPerecedero());
+        dto.setFechaCaducidad(alimento.getFechaCaducidad());
+        dto.setUbicacionId(alimento.getUbicacionId());
 
-	@PutMapping("/{id}")
-	public AlimentoResponseDTO update(@PathVariable Long id,
-			@Validated @RequestBody AlimentoRequestDTO dto) {
-		return service.update(id, dto);
-	}
+        model.addAttribute("alimento", dto);
+        model.addAttribute("ubicaciones", ubicacionService.list());
+        return "alimentos/form";
+    }
+    @PostMapping("/{id}/editar")
+    public String editar(@PathVariable Long id, @ModelAttribute AlimentoRequestDTO dto) {
+    	alimentoService.update(id, dto);
+        return "redirect:/alimentos";
+    }
 
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		service.delete(id);
-	}
+    @GetMapping("/{id}/eliminar")
+    public String eliminar(@PathVariable Long id) {
+    	alimentoService.delete(id);
+        return "redirect:/alimentos";
+    }
 }

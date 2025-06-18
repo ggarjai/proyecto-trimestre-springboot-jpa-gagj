@@ -7,10 +7,13 @@ import lombok.Data;
 @Data
 public class AlimentoRequestDTO {
 
+	private Long id;
 	@NotBlank
 	@Size(max = 120)
 	private String nombre;
 
+
+	
 	private boolean perecedero;
 
 	private LocalDate fechaCaducidad;
@@ -47,6 +50,13 @@ public class AlimentoRequestDTO {
 
 	public Long getUbicacionId() {
 		return ubicacionId;
+	}
+	public Long getId() {
+	    return id;
+	}
+
+	public void setId(Long id) {
+	    this.id = id;
 	}
 
 }
