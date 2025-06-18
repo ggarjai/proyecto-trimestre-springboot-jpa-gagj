@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Alimentos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Alimentos</h1>
+
+<a th:href="@{/alimentos/crear}">Crear Alimento</a>
+
+<table th:if="${!#lists.isEmpty(alimentos)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${alimentos}">
+        <td th:text="${p.id}">1</td>
+        <td th:text="${p.nombre}">Alimento</td>
+        <td>
+            <a th:href="@{|/alimentos/${p.id}/editar|}">Editar</a>
+            |
+            <a th:href="@{|/alimentos/${p.id}/eliminar|}"
+               onclick="return confirm('¿Eliminar este alimento?');">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p th:if="${#lists.isEmpty(alimentos)}">No hay alimentos registrados.</p>
+
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

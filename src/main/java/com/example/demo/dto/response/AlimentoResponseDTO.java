@@ -13,4 +13,5 @@ public class AlimentoResponseDTO {
 	private LocalDate fechaCaducidad;
 	private Integer cantidad;
 	private String ubicacion;
+	private Long ubicacionId;
 }
