@@ -35,10 +35,6 @@ mvn spring-boot:run
 - Controller (REST) -> Service (lógica) -> Repository
 Entity <-> DTO <-> Mapper (MapStruct)
 
-Ubicaciones (`/api/ubicaciones`)
-- GET `/` → 200 OK: lista de ubicaciones
-- POST `/` → 201 Created / 400
-
 ### Ejemplos
 Crear alimento
 ```JSON
